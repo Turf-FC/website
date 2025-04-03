@@ -142,8 +142,11 @@
         left: 0;
         width: 100%;
         height: 100%;
-        object-fit: cover;
         z-index: -1;
+        object-fit: cover;
+      }
+
+      #about-image {
       }
 
       .hero-overlay {
@@ -228,6 +231,7 @@
         width: 100%;
         height: auto;
         display: block;
+        object-fit: contain;
       }
 
       .about-text {
@@ -678,7 +682,7 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-      <img src="/api/placeholder/1200/800" alt="Soccer field" class="hero-image" />
+      <img src="./assets/images/hero.png" alt="Soccer field" class="hero-image" />
       <div class="hero-overlay"></div>
       <div class="container">
         <div class="hero-content">
@@ -695,7 +699,7 @@
         <h2 class="section-title">About Us</h2>
         <div class="about-content">
           <div class="about-image">
-            <img src="/api/placeholder/600/400" alt="Turf FC team" />
+            <img src="./assets/images/about.png" alt="Turf FC team" id="about-image" />
           </div>
           <div class="about-text">
             <p>
