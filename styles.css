@@ -1,0 +1,255 @@
+/* Custom styles for Competition Tracker */
+
+/* Loader Animation */
+.loader {
+  border: 4px solid rgba(59, 130, 246, 0.1);
+  border-top-color: #10b981;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Custom scrollbar for dark mode */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Active navigation link */
+.nav-link.active {
+  background-color: #374151;
+  color: #10b981;
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-upcoming {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.status-active {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.status-completed {
+  background-color: rgba(156, 163, 175, 0.1);
+  color: #9ca3af;
+}
+
+/* Event timeline styles */
+.event-timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.event-timeline::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #374151;
+}
+
+.event-item {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.event-item::before {
+  content: "";
+  position: absolute;
+  left: -2rem;
+  top: 0.5rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+/* Modal animation */
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Toast animation */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast {
+  animation: slideInRight 0.3s ease-out;
+}
+
+/* Position badge styles */
+.position-badge {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  background-color: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.position-primary {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: #10b981;
+  color: #10b981;
+}
+
+/* Score display */
+.score-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #1f2937;
+  border-radius: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+/* Standings table styles */
+.standings-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.standings-table th {
+  background-color: #1f2937;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.standings-table tbody tr {
+  transition: background-color 0.2s;
+}
+
+.standings-table tbody tr:hover {
+  background-color: rgba(55, 65, 81, 0.5);
+}
+
+/* Top 3 position highlights */
+.standings-table tbody tr:nth-child(1) {
+  background-color: rgba(251, 191, 36, 0.05);
+  border-left: 3px solid #fbbf24;
+}
+
+.standings-table tbody tr:nth-child(2) {
+  background-color: rgba(156, 163, 175, 0.05);
+  border-left: 3px solid #9ca3af;
+}
+
+.standings-table tbody tr:nth-child(3) {
+  background-color: rgba(251, 146, 60, 0.05);
+  border-left: 3px solid #fb923c;
+}
+
+/* Competition tabs */
+.competition-tab {
+  position: relative;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  color: #9ca3af;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.competition-tab:hover {
+  background-color: #374151;
+  color: #e5e7eb;
+}
+
+.competition-tab.active {
+  background-color: #374151;
+  color: #10b981;
+}
+
+.competition-tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #10b981;
+}
+
+/* Responsive grid adjustments */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .standings-table {
+    font-size: 0.875rem;
+  }
+
+  .standings-table th,
+  .standings-table td {
+    padding: 0.5rem 0.25rem;
+  }
+}

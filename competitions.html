@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Competition Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <style>
+      * {
+        font-family: "Ubuntu", sans-serif;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      }
+
+      :root {
+        --primary: #37238d;
+        --success: #6eb553;
+        --warning: #eee248;
+        --error: #c63035;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f5f5f5;
+        --bg-tertiary: #e5e5e5;
+        --text-primary: #171717;
+        --text-secondary: #404040;
+        --text-muted: #737373;
+        --border-color: #d4d4d4;
+      }
+
+      [data-theme="dark"] {
+        --bg-primary: #171717;
+        --bg-secondary: #262626;
+        --bg-tertiary: #404040;
+        --text-primary: #f5f5f5;
+        --text-secondary: #e5e5e5;
+        --text-muted: #a3a3a3;
+        --border-color: #525252;
+      }
+
+      body {
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+      }
+
+      .bg-primary {
+        background-color: var(--bg-primary);
+      }
+      .bg-secondary {
+        background-color: var(--bg-secondary);
+      }
+      .bg-tertiary {
+        background-color: var(--bg-tertiary);
+      }
+      .text-primary {
+        color: var(--text-primary);
+      }
+      .text-secondary {
+        color: var(--text-secondary);
+      }
+      .text-muted {
+        color: var(--text-muted);
+      }
+      .border-custom {
+        border-color: var(--border-color);
+      }
+
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      .tab-active {
+        background-color: var(--primary);
+        color: white;
+      }
+
+      .fixture-card {
+        border-left: 3px solid var(--primary);
+      }
+
+      .event-item {
+        position: relative;
+        padding-left: 2rem;
+      }
+
+      .event-item::before {
+        content: "";
+        position: absolute;
+        left: 0.5rem;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background-color: var(--border-color);
+      }
+
+      .event-dot {
+        position: absolute;
+        left: 0.25rem;
+        top: 0.5rem;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: var(--primary);
+      }
+
+      .loading {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .player-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        background-color: var(--bg-tertiary);
+      }
+
+      .team-color-badge {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+
+      .standings-table {
+        font-size: 0.75rem;
+      }
+
+      @media (min-width: 768px) {
+        .standings-table {
+          font-size: 0.8125rem;
+        }
+      }
+
+      .position-badge {
+        font-size: 0.65rem;
+        padding: 0.125rem 0.375rem;
+        border-radius: 0.25rem;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="bg-secondary border-b border-custom sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-3 py-3 md:px-6 md:py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 md:w-10 md:h-10 bg-primary rounded-full flex items-center justify-center text-white text-sm md:text-base font-bold">SC</div>
+            <div>
+              <h1 class="text-sm md:text-lg font-bold text-primary">Sports Competition</h1>
+              <p class="text-xs text-muted hidden md:block">Live Dashboard</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 md:space-x-3">
+            <select id="competitionSelect" class="text-xs md:text-sm px-2 md:px-3 py-1.5 md:py-2 rounded-md border border-custom bg-primary">
+              <option value="">Select Competition</option>
+            </select>
+            <button id="themeToggle" class="p-1.5 md:p-2 rounded-md hover:bg-tertiary">
+              <svg id="sunIcon" class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+              <svg id="moonIcon" class="hidden w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Tabs -->
+    <div class="bg-secondary border-b border-custom sticky top-[52px] md:top-[64px] z-40">
+      <div class="max-w-7xl mx-auto px-3 md:px-6">
+        <nav class="flex space-x-1 overflow-x-auto scrollbar-hide">
+          <button class="tab-btn tab-active px-3 md:px-4 py-2 text-xs md:text-sm font-medium rounded-t-md whitespace-nowrap" data-tab="standings">Standings</button>
+          <button class="tab-btn px-3 md:px-4 py-2 text-xs md:text-sm font-medium rounded-t-md whitespace-nowrap hover:bg-tertiary" data-tab="fixtures">Fixtures</button>
+          <button class="tab-btn px-3 md:px-4 py-2 text-xs md:text-sm font-medium rounded-t-md whitespace-nowrap hover:bg-tertiary" data-tab="teams">Teams</button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-3 py-4 md:px-6 md:py-6">
+      <div id="loadingState" class="text-center py-12">
+        <div class="loading inline-block w-10 h-10 md:w-12 md:h-12 border-4 border-border-custom border-t-primary rounded-full animate-spin"></div>
+        <p class="mt-4 text-sm md:text-base text-muted">Loading competition data...</p>
+      </div>
+
+      <div id="emptyState" class="hidden text-center py-12">
+        <svg class="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 text-muted opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <p class="text-base md:text-lg text-muted">Select a competition to view dashboard</p>
+      </div>
+
+      <!-- Standings Tab -->
+      <div id="standingsTab" class="hidden">
+        <div class="bg-secondary rounded-lg border border-custom overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full standings-table">
+              <thead class="bg-tertiary">
+                <tr>
+                  <th class="text-left px-2 md:px-4 py-2 font-semibold">#</th>
+                  <th class="text-left px-2 md:px-4 py-2 font-semibold">Team</th>
+                  <th class="text-center px-1 md:px-2 py-2 font-semibold">MP</th>
+                  <th class="text-center px-1 md:px-2 py-2 font-semibold">W</th>
+                  <th class="text-center px-1 md:px-2 py-2 font-semibold">D</th>
+                  <th class="text-center px-1 md:px-2 py-2 font-semibold">L</th>
+                  <th class="text-center px-1 md:px-2 py-2 font-semibold">GS:GC</th>
+                  <th class="text-center px-2 md:px-4 py-2 font-semibold">P</th>
+                </tr>
+              </thead>
+              <tbody id="standingsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fixtures Tab -->
+      <div id="fixturesTab" class="hidden">
+        <div class="space-y-3 md:space-y-4" id="fixturesContainer"></div>
+      </div>
+
+      <!-- Teams Tab -->
+      <div id="teamsTab" class="hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4" id="teamsContainer"></div>
+      </div>
+    </main>
+
+    <script>
+      const API_BASE_URL = "http://107.174.249.39:5000/api"
+      let competitions = []
+      let teams = []
+      let players = []
+      let fixtures = []
+      let events = []
+      let currentCompetition = null
+
+      // Theme Management
+      function initTheme() {
+        const savedTheme = localStorage.getItem("theme") || "light"
+        document.documentElement.setAttribute("data-theme", savedTheme)
+        updateThemeIcon(savedTheme)
+      }
+
+      function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute("data-theme")
+        const newTheme = currentTheme === "light" ? "dark" : "light"
+        document.documentElement.setAttribute("data-theme", newTheme)
+        localStorage.setItem("theme", newTheme)
+        updateThemeIcon(newTheme)
+      }
+
+      function updateThemeIcon(theme) {
+        const sunIcon = document.getElementById("sunIcon")
+        const moonIcon = document.getElementById("moonIcon")
+        if (theme === "light") {
+          sunIcon.classList.remove("hidden")
+          moonIcon.classList.add("hidden")
+        } else {
+          sunIcon.classList.add("hidden")
+          moonIcon.classList.remove("hidden")
+        }
+      }
+
+      // Tab Management
+      function switchTab(tabName) {
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.classList.remove("tab-active")
+        })
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add("tab-active")
+
+        document.getElementById("standingsTab").classList.add("hidden")
+        document.getElementById("fixturesTab").classList.add("hidden")
+        document.getElementById("teamsTab").classList.add("hidden")
+
+        document.getElementById(`${tabName}Tab`).classList.remove("hidden")
+      }
+
+      // API Functions
+      async function fetchData(endpoint) {
+        try {
+          const response = await fetch(`${API_BASE_URL}${endpoint}`)
+          if (!response.ok) throw new Error("Failed to fetch")
+          return await response.json()
+        } catch (error) {
+          console.error(`Error fetching ${endpoint}:`, error)
+          return []
+        }
+      }
+
+      async function loadAllData() {
+        document.getElementById("loadingState").classList.remove("hidden")
+        document.getElementById("emptyState").classList.add("hidden")
+
+        competitions = await fetchData("/competitions")
+        teams = await fetchData("/teams")
+        players = await fetchData("/players")
+        fixtures = await fetchData("/fixtures")
+        events = await fetchData("/events")
+
+        populateCompetitions()
+        document.getElementById("loadingState").classList.add("hidden")
+      }
+
+      function populateCompetitions() {
+        const select = document.getElementById("competitionSelect")
+        select.innerHTML = '<option value="">Select Competition</option>'
+
+        competitions.forEach((comp) => {
+          const option = document.createElement("option")
+          option.value = comp.id || comp._id
+          option.textContent = `${comp.year} - ${comp.format}`
+          select.appendChild(option)
+        })
+
+        // Auto-select first competition
+        if (competitions.length > 0) {
+          select.value = competitions[0].id || competitions[0]._id
+          loadCompetition(select.value)
+        } else {
+          document.getElementById("emptyState").classList.remove("hidden")
+        }
+      }
+
+      function loadCompetition(competitionId) {
+        if (!competitionId) {
+          document.getElementById("emptyState").classList.remove("hidden")
+          document.getElementById("standingsTab").classList.add("hidden")
+          document.getElementById("fixturesTab").classList.add("hidden")
+          document.getElementById("teamsTab").classList.add("hidden")
+          return
+        }
+
+        currentCompetition = competitions.find((c) => (c.id || c._id) === competitionId)
+        if (!currentCompetition) return
+
+        document.getElementById("emptyState").classList.add("hidden")
+        document.getElementById("standingsTab").classList.remove("hidden")
+
+        renderStandings()
+        renderFixtures()
+        renderTeams()
+      }
+
+      // Calculate Standings
+      function calculateStandings() {
+        const competitionTeams = currentCompetition.teams || []
+        const standings = {}
+
+        // Initialize standings
+        competitionTeams.forEach((teamId) => {
+          standings[teamId] = {
+            mp: 0,
+            w: 0,
+            d: 0,
+            l: 0,
+            gs: 0,
+            gc: 0,
+            p: 0,
+          }
+        })
+
+        // Calculate from fixtures
+        const competitionFixtures = fixtures.filter((f) => f.competition === (currentCompetition.id || currentCompetition._id) && f.finalScore)
+
+        competitionFixtures.forEach((fixture) => {
+          const [homeId, awayId] = fixture.participants || []
+          if (!homeId || !awayId || !standings[homeId] || !standings[awayId]) return
+
+          const scoreParts = fixture.finalScore.split("-").map((s) => parseInt(s.trim()))
+          if (scoreParts.length !== 2 || isNaN(scoreParts[0]) || isNaN(scoreParts[1])) return
+
+          const [homeScore, awayScore] = scoreParts
+
+          standings[homeId].mp++
+          standings[awayId].mp++
+          standings[homeId].gs += homeScore
+          standings[homeId].gc += awayScore
+          standings[awayId].gs += awayScore
+          standings[awayId].gc += homeScore
+
+          if (homeScore > awayScore) {
+            standings[homeId].w++
+            standings[homeId].p += 3
+            standings[awayId].l++
+          } else if (homeScore < awayScore) {
+            standings[awayId].w++
+            standings[awayId].p += 3
+            standings[homeId].l++
+          } else {
+            standings[homeId].d++
+            standings[awayId].d++
+            standings[homeId].p++
+            standings[awayId].p++
+          }
+        })
+
+        // Sort by points, then goal difference, then goals scored
+        const sortedStandings = Object.entries(standings)
+          .map(([teamId, stats]) => ({
+            teamId,
+            ...stats,
+            gd: stats.gs - stats.gc,
+          }))
+          .sort((a, b) => {
+            if (b.p !== a.p) return b.p - a.p
+            if (b.gd !== a.gd) return b.gd - a.gd
+            return b.gs - a.gs
+          })
+
+        return sortedStandings
+      }
+
+      function renderStandings() {
+        const standings = calculateStandings()
+        const tbody = document.getElementById("standingsBody")
+        tbody.innerHTML = ""
+
+        standings.forEach((row, index) => {
+          const team = teams.find((t) => (t.id || t._id) === row.teamId)
+          if (!team) return
+
+          const tr = document.createElement("tr")
+          tr.className = "border-b border-custom hover:bg-tertiary"
+          tr.innerHTML = `
+                    <td class="px-2 md:px-4 py-2 font-semibold">${index + 1}</td>
+                    <td class="px-2 md:px-4 py-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="team-color-badge" style="background-color: ${team.color || team.teamColor}"></span>
+                            <span class="font-medium">${team.alias || team.teamName}</span>
+                        </div>
+                    </td>
+                    <td class="text-center px-1 md:px-2 py-2">${row.mp}</td>
+                    <td class="text-center px-1 md:px-2 py-2">${row.w}</td>
+                    <td class="text-center px-1 md:px-2 py-2">${row.d}</td>
+                    <td class="text-center px-1 md:px-2 py-2">${row.l}</td>
+                    <td class="text-center px-1 md:px-2 py-2">${row.gs}:${row.gc}</td>
+                    <td class="text-center px-2 md:px-4 py-2 font-bold">${row.p}</td>
+                `
+          tbody.appendChild(tr)
+        })
+      }
+
+      function renderFixtures() {
+        const container = document.getElementById("fixturesContainer")
+        container.innerHTML = ""
+
+        const competitionFixtures = fixtures.filter((f) => f.competition === (currentCompetition.id || currentCompetition._id))
+
+        if (competitionFixtures.length === 0) {
+          container.innerHTML = '<p class="text-center text-muted py-8">No fixtures scheduled</p>'
+          return
+        }
+
+        // Sort by date
+        competitionFixtures.sort((a, b) => new Date(a.starts) - new Date(b.starts))
+
+        competitionFixtures.forEach((fixture) => {
+          const [homeId, awayId] = fixture.participants || []
+          const homeTeam = teams.find((t) => (t.id || t._id) === homeId)
+          const awayTeam = teams.find((t) => (t.id || t._id) === awayId)
+
+          if (!homeTeam || !awayTeam) return
+
+          const fixtureEvents = events.filter((e) => e.fixture === (fixture.id || fixture._id))
+          const hasScore = !!fixture.finalScore
+
+          const card = document.createElement("div")
+          card.className = "bg-secondary rounded-lg border border-custom p-3 md:p-4 fixture-card"
+
+          let eventsHtml = ""
+          if (fixtureEvents.length > 0) {
+            eventsHtml = '<div class="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-custom"><h4 class="text-xs md:text-sm font-semibold mb-2 md:mb-3">Match Events</h4><div class="space-y-2 md:space-y-3">'
+
+            fixtureEvents.forEach((event) => {
+              const eventPlayers = (event.participants || [])
+                .map((pId) => {
+                  const player = players.find((p) => (p.id || p._id) === pId)
+                  return player ? `${player.firstName} ${player.lastName}` : ""
+                })
+                .filter((n) => n)
+                .join(", ")
+
+              eventsHtml += `
+                            <div class="event-item text-xs md:text-sm">
+                                <div class="event-dot"></div>
+                                <div class="font-medium">${event.title || event.eventTitle}</div>
+                                ${eventPlayers ? `<div class="text-muted mt-0.5">${eventPlayers}</div>` : ""}
+                                ${event.notes || event.description ? `<div class="text-muted text-xs mt-0.5">${event.notes || event.description}</div>` : ""}
+                            </div>
+                        `
+            })
+
+            eventsHtml += "</div></div>"
+          }
+
+          card.innerHTML = `
+                    <div class="flex items-center justify-between mb-2 md:mb-3">
+                        <div class="text-xs md:text-sm text-muted">${formatDate(fixture.starts)}</div>
+                        ${hasScore ? '<span class="text-xs font-semibold text-success">FT</span>' : '<span class="text-xs font-semibold" style="color: var(--warning)">Upcoming</span>'}
+                    </div>
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2 flex-1">
+                            <span class="team-color-badge" style="background-color: ${homeTeam.color || homeTeam.teamColor}"></span>
+                            <span class="font-medium text-sm md:text-base">${homeTeam.alias || homeTeam.teamName}</span>
+                        </div>
+                        <div class="text-lg md:text-xl font-bold px-3 md:px-4">
+                            ${hasScore ? fixture.finalScore : "vs"}
+                        </div>
+                        <div class="flex items-center space-x-2 flex-1 justify-end">
+                            <span class="font-medium text-sm md:text-base">${awayTeam.alias || awayTeam.teamName}</span>
+                            <span class="team-color-badge" style="background-color: ${awayTeam.color || awayTeam.teamColor}"></span>
+                        </div>
+                    </div>
+                    <div class="text-xs text-muted">
+                        ${fixture.venue || "Mo Arena"} ${fixture.referee ? `• ${fixture.referee}` : ""}
+                    </div>
+                    ${eventsHtml}
+                `
+
+          container.appendChild(card)
+        })
+      }
+
+      function renderTeams() {
+        const container = document.getElementById("teamsContainer")
+        container.innerHTML = ""
+
+        const competitionTeams = (currentCompetition.teams || []).map((teamId) => teams.find((t) => (t.id || t._id) === teamId)).filter((t) => t)
+
+        if (competitionTeams.length === 0) {
+          container.innerHTML = '<p class="text-center text-muted py-8 col-span-full">No teams in this competition</p>'
+          return
+        }
+
+        competitionTeams.forEach((team) => {
+          const teamPlayers = players.filter((p) => p.team === (team.id || team._id))
+
+          const card = document.createElement("div")
+          card.className = "bg-secondary rounded-lg border border-custom p-3 md:p-4"
+          card.innerHTML = `
+                    <div class="flex items-center space-x-3 mb-3 md:mb-4 pb-3 border-b border-custom">
+                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center text-white text-lg md:text-xl font-bold" style="background-color: ${team.color || team.teamColor}">
+                            ${team.letter || team.teamLetter}
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-sm md:text-base">${team.alias || team.teamName}</h3>
+                            <p class="text-xs text-muted">${teamPlayers.length} players</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        ${teamPlayers.length === 0 ? '<p class="text-xs text-muted text-center py-4">No players</p>' : ""}
+                        ${teamPlayers
+                          .map(
+                            (player) => `
+                            <div class="flex items-center space-x-2 md:space-x-3 p-1.5 md:p-2 rounded hover:bg-tertiary">
+                                ${
+                                  player.imageUrl || player.image
+                                    ? `<img src="${player.imageUrl || player.image}" alt="${player.firstName}" class="player-avatar">`
+                                    : `<div class="player-avatar flex items-center justify-center bg-tertiary font-bold text-xs md:text-sm">
+                                        ${player.firstName[0]}${player.lastName[0]}
+                                    </div>`
+                                }
+                                <div class="flex-1 min-w-0">
+                                    <div class="font-medium text-xs md:text-sm truncate">${player.firstName} ${player.lastName}</div>
+                                    <div class="flex items-center space-x-1.5 mt-0.5">
+                                        <span class="position-badge bg-primary text-white">${player.primaryPosition}</span>
+                                        ${player.alias ? `<span class="text-xs text-muted">• ${player.alias}</span>` : ""}
+                                    </div>
+                                </div>
+                            </div>
+                        `
+                          )
+                          .join("")}
+                    </div>
+                `
+
+          container.appendChild(card)
+        })
+      }
+
+      function formatDate(dateString) {
+        const date = new Date(dateString)
+        const dateStr = date.toLocaleDateString("en-US", { month: "short", day: "numeric" })
+        const timeStr = date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true })
+        return `${dateStr}, ${timeStr}`
+      }
+
+      // Event Listeners
+      document.addEventListener("DOMContentLoaded", () => {
+        initTheme()
+        loadAllData()
+
+        document.getElementById("themeToggle").addEventListener("click", toggleTheme)
+
+        document.getElementById("competitionSelect").addEventListener("change", (e) => {
+          loadCompetition(e.target.value)
+        })
+
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            switchTab(btn.dataset.tab)
+          })
+        })
+      })
+    </script>
+  </body>
+</html>

@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>⚽Turf FC⚽</title>
+    <title>Turf FC - Amateur Football Club</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="tw.js"></script> -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet" />
     <style>
       :root {
         --primary: #37238d;
@@ -41,988 +43,670 @@
       }
 
       * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+        font-family: "Ubuntu", sans-serif;
       }
 
       body {
-        font-family: "Outfit", sans-serif;
         background-color: var(--bg-primary);
         color: var(--text-primary);
-        line-height: 1.6;
-        transition: background-color 0.3s, color 0.3s;
-      }
-
-      .container {
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-      }
-
-      /* Header Styles */
-      header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background-color: var(--bg-primary);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        transition: background-color 0.3s;
-      }
-
-      .navbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px 0;
+        transition: background-color 0.3s ease, color 0.3s ease;
       }
 
       .logo {
         height: 50px;
       }
 
-      .nav-links {
-        display: flex;
-        list-style: none;
-      }
-
-      .nav-links li {
-        margin-left: 30px;
-      }
-
-      .nav-links a {
-        text-decoration: none;
-        color: var(--text-primary);
-        font-weight: 500;
-        font-size: 16px;
-        transition: color 0.3s;
-      }
-
-      .nav-links a:hover {
-        color: var(--primary);
-      }
-
-      .theme-toggle {
-        background: none;
-        border: none;
-        cursor: pointer;
-        margin-left: 20px;
-        color: var(--text-primary);
-        font-size: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .mobile-menu-btn {
-        display: none;
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: 24px;
-        color: var(--text-primary);
-      }
-
-      /* Hero Section */
-      .hero {
+      .nav-link {
         position: relative;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        overflow: hidden;
-        padding-top: 60px;
+        transition: color 0.3s ease;
       }
 
-      .hero-image {
+      .nav-link::after {
+        content: "";
         position: absolute;
-        top: 0;
+        bottom: -4px;
         left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--primary);
+        transition: width 0.3s ease;
+      }
+
+      .nav-link:hover::after,
+      .nav-link.active::after {
         width: 100%;
-        height: 100%;
-        z-index: -1;
-        object-fit: cover;
       }
 
-      #about-image {
-      }
-
-      .hero-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
-        z-index: -1;
-      }
-
-      .hero-content {
-        width: 100%;
-        color: var(--white);
-        text-align: center;
-        padding: 0 20px;
-      }
-
-      .hero-title {
-        font-size: 3rem;
-        font-weight: 700;
-        margin-bottom: 16px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-      }
-
-      .hero-subtitle {
-        font-size: 1.5rem;
-        margin-bottom: 32px;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-      }
-
-      .cta-button {
-        display: inline-block;
+      .btn-primary {
         background-color: var(--primary);
         color: var(--white);
-        padding: 14px 32px;
-        border-radius: 8px;
-        font-size: 18px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: background-color 0.3s, transform 0.2s;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
       }
 
-      .cta-button:hover {
-        background-color: #2b1a70;
+      .btn-primary:hover {
+        opacity: 0.9;
         transform: translateY(-2px);
       }
 
-      .cta-button:active {
-        transform: translateY(0);
-      }
-
-      /* About Section */
-      .section {
-        padding: 80px 0;
-      }
-
-      .section-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 60px;
-        color: var(--primary);
-      }
-
-      .about-content {
-        display: flex;
-        align-items: center;
-        gap: 60px;
-      }
-
-      .about-image {
-        flex: 1;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      }
-
-      .about-image img {
-        width: 100%;
-        height: auto;
-        display: block;
-        object-fit: contain;
-      }
-
-      .about-text {
-        flex: 1;
-      }
-
-      .about-text p {
-        font-size: 18px;
-        margin-bottom: 24px;
-        color: var(--text-secondary);
-      }
-
-      /* Contact Section */
-      .contact-section {
+      .card {
         background-color: var(--bg-secondary);
-        padding: 80px 0;
-      }
-
-      .tab-container {
-        margin-bottom: 30px;
-        display: flex;
-        justify-content: center;
-      }
-
-      .tab-buttons {
-        display: flex;
-        background-color: var(--bg-primary);
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      }
-
-      .tab-button {
-        padding: 14px 24px;
-        font-size: 16px;
-        font-weight: 500;
-        border: none;
-        background: none;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        color: var(--text-primary);
-      }
-
-      .tab-button.active {
-        background-color: var(--primary);
-        color: var(--white);
-      }
-
-      .tab-content {
-        display: none;
-      }
-
-      .tab-content.active {
-        display: block;
-      }
-
-      .contact-form {
-        background-color: var(--bg-primary);
-        padding: 40px;
-        border-radius: 12px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-        max-width: 800px;
-        margin: 0 auto;
-      }
-
-      .form-group {
-        margin-bottom: 24px;
-      }
-
-      .form-row {
-        display: flex;
-        gap: 20px;
-        margin-bottom: 24px;
-      }
-
-      .form-col {
-        flex: 1;
-      }
-
-      .form-label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-        color: var(--text-secondary);
-      }
-
-      .form-input,
-      .form-textarea,
-      .form-select {
-        width: 100%;
-        padding: 14px 16px;
         border: 1px solid var(--border-color);
-        border-radius: 8px;
-        font-family: "Outfit", sans-serif;
-        font-size: 16px;
-        background-color: var(--bg-primary);
-        color: var(--text-primary);
-        transition: border-color 0.3s, box-shadow 0.3s;
+        transition: all 0.3s ease;
       }
 
-      .form-input:focus,
-      .form-textarea:focus,
-      .form-select:focus {
+      .form-input {
+        background-color: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+      }
+
+      .form-input:focus {
         outline: none;
         border-color: var(--primary);
-        box-shadow: 0 0 0 2px rgba(55, 35, 141, 0.2);
+        box-shadow: 0 0 0 3px rgba(55, 35, 141, 0.1);
       }
 
-      .form-textarea {
-        min-height: 140px;
-        resize: vertical;
+      .carousel-container {
+        position: relative;
+        overflow: hidden;
       }
 
-      .submit-button {
-        display: inline-block;
-        background-color: var(--primary);
-        color: var(--white);
-        padding: 14px 32px;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
+      .carousel-track {
+        display: flex;
+        transition: transform 0.5s ease;
+      }
+
+      .carousel-item {
+        min-width: 100%;
+        aspect-ratio: 16/9;
+      }
+
+      .toggle-switch {
+        position: relative;
+        width: 60px;
+        height: 30px;
+        background-color: var(--gray-400);
+        border-radius: 15px;
         cursor: pointer;
-        transition: background-color 0.3s, transform 0.2s;
+        transition: background-color 0.3s ease;
       }
 
-      .submit-button:hover {
-        background-color: #2b1a70;
-        transform: translateY(-2px);
-      }
-
-      .submit-button:active {
-        transform: translateY(0);
-      }
-
-      /* Footer */
-      footer {
+      .toggle-switch.active {
         background-color: var(--primary);
-        color: var(--white);
-        padding: 60px 0 30px;
       }
 
-      .footer-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 40px;
-        margin-bottom: 40px;
-      }
-
-      .footer-col {
-        flex: 1;
-        min-width: 200px;
-      }
-
-      .footer-title {
-        font-size: 20px;
-        font-weight: 600;
-        margin-bottom: 20px;
-      }
-
-      .footer-links {
-        list-style: none;
-      }
-
-      .footer-links li {
-        margin-bottom: 12px;
-      }
-
-      .footer-links a {
-        text-decoration: none;
-        color: var(--gray-200);
-        transition: color 0.3s;
-      }
-
-      .footer-links a:hover {
-        color: var(--white);
-      }
-
-      .contact-info {
-        margin-bottom: 12px;
-        display: flex;
-        align-items: flex-start;
-        gap: 12px;
-      }
-
-      .contact-icon {
-        font-size: 18px;
-        color: var(--success);
-      }
-
-      .social-links {
-        display: flex;
-        gap: 16px;
-        margin-top: 20px;
-      }
-
-      .social-link {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
+      .toggle-slider {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 24px;
+        height: 24px;
+        background-color: var(--white);
         border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.1);
-        color: var(--white);
-        text-decoration: none;
-        transition: background-color 0.3s;
+        transition: transform 0.3s ease;
       }
 
-      .social-link:hover {
-        background-color: rgba(255, 255, 255, 0.2);
+      .toggle-switch.active .toggle-slider {
+        transform: translateX(30px);
       }
 
-      .copyright {
-        text-align: center;
-        padding-top: 30px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        font-size: 14px;
-        color: var(--gray-300);
+      .segmented-control {
+        display: inline-flex;
+        background-color: var(--bg-secondary);
+        border-radius: 8px;
+        padding: 4px;
       }
 
-      /* Modal */
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.6);
-        z-index: 2000;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .modal-content {
-        background-color: var(--bg-primary);
-        border-radius: 12px;
-        padding: 40px;
-        text-align: center;
-        max-width: 500px;
-        width: 90%;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        transform: translateY(20px);
-        opacity: 0;
-        transition: transform 0.3s, opacity 0.3s;
-      }
-
-      .modal.show .modal-content {
-        transform: translateY(0);
-        opacity: 1;
-      }
-
-      .success-icon {
-        font-size: 60px;
-        color: var(--success);
-        margin-bottom: 24px;
-      }
-
-      .modal-title {
-        font-size: 24px;
-        font-weight: 600;
-        margin-bottom: 16px;
-      }
-
-      .modal-text {
-        font-size: 16px;
-        margin-bottom: 30px;
+      .segmented-button {
+        padding: 8px 24px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
         color: var(--text-secondary);
       }
 
-      .modal-button {
-        display: inline-block;
+      .segmented-button.active {
         background-color: var(--primary);
         color: var(--white);
-        padding: 12px 24px;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: background-color 0.3s;
       }
 
-      .modal-button:hover {
-        background-color: #2b1a70;
-      }
-
-      /* Mobile Menu */
-      .mobile-menu {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 80%;
-        max-width: 320px;
-        height: 100%;
-        background-color: var(--bg-primary);
-        z-index: 1001;
-        padding: 20px;
-        transition: right 0.3s ease;
-        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-        display: flex;
-        flex-direction: column;
-      }
-
-      .mobile-menu.active {
-        right: 0;
-      }
-
-      .close-menu {
-        align-self: flex-end;
-        background: none;
-        border: none;
-        font-size: 24px;
-        color: var(--text-primary);
-        cursor: pointer;
-        margin-bottom: 20px;
-      }
-
-      .mobile-nav-links {
-        list-style: none;
-      }
-
-      .mobile-nav-links li {
-        margin-bottom: 20px;
-      }
-
-      .mobile-nav-links a {
-        display: block;
-        text-decoration: none;
-        color: var(--text-primary);
-        font-size: 18px;
-        font-weight: 500;
-        padding: 8px 0;
-      }
-
-      .overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 1000;
+      .page {
         display: none;
+        animation: fadeIn 0.4s ease;
       }
 
-      .overlay.active {
+      .page.active {
         display: block;
       }
 
-      /* Responsive Styles */
-      @media (max-width: 992px) {
-        .about-content {
-          flex-direction: column;
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
         }
-
-        .form-row {
-          flex-direction: column;
-          gap: 10px;
-        }
-      }
-
-      @media (max-width: 768px) {
-        .nav-links,
-        .theme-toggle-desktop {
-          display: none;
-        }
-
-        .mobile-menu-btn {
-          display: block;
-        }
-
-        .hero-title {
-          font-size: 2.5rem;
-        }
-
-        .hero-subtitle {
-          font-size: 1.2rem;
-        }
-
-        .section-title {
-          font-size: 2rem;
-          margin-bottom: 40px;
-        }
-
-        .contact-form {
-          padding: 30px 20px;
-        }
-
-        .footer-container {
-          flex-direction: column;
-          gap: 30px;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
       }
 
-      @media (max-width: 576px) {
-        .hero-title {
-          font-size: 2rem;
-        }
-
-        .section {
-          padding: 60px 0;
-        }
-
-        .tab-button {
-          padding: 12px 16px;
-          font-size: 14px;
-        }
+      .hero-bg {
+        background: linear-gradient(135deg, var(--primary) 0%, #5a3fb8 100%);
       }
     </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "var(--primary)",
+              success: "var(--success)",
+              error: "var(--error)",
+              warning: "var(--warning)",
+              "bg-primary": "var(--bg-primary)",
+              "bg-secondary": "var(--bg-secondary)",
+              "text-primary": "var(--text-primary)",
+              "text-secondary": "var(--text-secondary)",
+              "border-color": "var(--border-color)",
+            },
+          },
+        },
+      }
+    </script>
   </head>
-  <body>
-    <!-- Header -->
-    <header>
-      <div class="container">
-        <nav class="navbar">
-          <img src="./assets/images/logo.png" alt="Turf FC Logo" id="club-logo" class="logo" />
-          <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-          <button class="theme-toggle theme-toggle-desktop" aria-label="Toggle dark mode">
-            <span class="light-icon">☀️</span>
-            <span class="dark-icon" style="display: none">🌙</span>
-          </button>
-          <button class="mobile-menu-btn" aria-label="Open menu">☰</button>
-        </nav>
+  <body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 backdrop-blur-lg" style="background-color: rgba(var(--bg-primary), 0.8); border-bottom: 1px solid var(--border-color)">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center space-x-8">
+            <div class="flex items-center space-x-2">
+              <img src="./assets/images/logo.png" alt="Turf FC Logo" id="club-logo" class="logo" />
+              <span class="text-xl font-bold">Turf FC</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+              <a href="#" class="nav-link active" data-page="home">Home</a>
+              <a href="#" class="nav-link" data-page="about">About</a>
+              <a href="#" class="nav-link" data-page="contact">Contact</a>
+              <a href="#" class="nav-link" data-page="media">Media</a>
+              <a href="competitions.html" class="nav-link" target="_blank">Competitions</a>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <a href="account.html" class="hidden md:block btn-primary px-4 py-2 rounded-lg" target="_blank">My Account</a>
+            <button id="themeToggle" class="toggle-switch" aria-label="Toggle dark mode">
+              <div class="toggle-slider"></div>
+            </button>
+            <button id="mobileMenuBtn" class="md:hidden p-2">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
-    </header>
+      <!-- Mobile Menu -->
+      <div id="mobileMenu" class="hidden md:hidden" style="background-color: var(--bg-secondary)">
+        <div class="px-4 py-3 space-y-2">
+          <a href="#" class="block py-2 nav-link" data-page="home">Home</a>
+          <a href="#" class="block py-2 nav-link" data-page="about">About</a>
+          <a href="#" class="block py-2 nav-link" data-page="contact">Contact</a>
+          <a href="#" class="block py-2 nav-link" data-page="media">Media</a>
+          <a href="https://competitions.turffc.club" class="block py-2 nav-link">Competitions</a>
+          <a href="https://account.turffc.club" class="block py-2 btn-primary text-center rounded-lg mt-4">My Account</a>
+        </div>
+      </div>
+    </nav>
 
-    <!-- Mobile Menu -->
-    <div class="mobile-menu">
-      <button class="close-menu" aria-label="Close menu">✕</button>
-      <ul class="mobile-nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <button class="theme-toggle" aria-label="Toggle dark mode">
-        <span class="light-icon">☀️</span>
-        <span class="dark-icon" style="display: none">🌙</span>
-      </button>
+    <!-- Home Page -->
+    <div id="home" class="page active">
+      <!-- Hero Section -->
+      <section class="hero-bg text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+          <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h1 class="text-4xl md:text-6xl font-bold mb-6">Welcome to Turf FC</h1>
+              <p class="text-xl md:text-2xl mb-8 opacity-90">Where passion meets the pitch. Join our vibrant football community.</p>
+              <button class="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition">Get Started</button>
+            </div>
+            <div class="flex justify-center">
+              <svg viewBox="0 0 400 400" class="w-full max-w-md">
+                <circle cx="200" cy="200" r="180" fill="rgba(255,255,255,0.1)" stroke="white" stroke-width="3" />
+                <circle cx="200" cy="200" r="30" fill="white" />
+                <line x1="200" y1="20" x2="200" y2="380" stroke="white" stroke-width="2" />
+                <line x1="20" y1="200" x2="380" y2="200" stroke="white" stroke-width="2" />
+                <circle cx="200" cy="200" r="120" fill="none" stroke="white" stroke-width="2" />
+                <path d="M 150 100 Q 200 50 250 100 L 250 300 Q 200 350 150 300 Z" fill="rgba(255,255,255,0.15)" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Introduction -->
+      <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="text-center max-w-3xl mx-auto">
+          <h2 class="text-3xl md:text-4xl font-bold mb-6">About Turf FC</h2>
+          <p class="text-lg md:text-xl" style="color: var(--text-secondary)">Turf FC is more than just a football club—it's a community built on passion, inclusivity, and the love of the beautiful game. From casual players to dedicated athletes, everyone finds a home on our pitch.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8 mt-16">
+          <div class="card rounded-xl p-6 text-center hover:shadow-xl">
+            <div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style="background-color: var(--primary)">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Inclusive Community</h3>
+            <p style="color: var(--text-secondary)">Players of all ages and skill levels welcome</p>
+          </div>
+          <div class="card rounded-xl p-6 text-center hover:shadow-xl">
+            <div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style="background-color: var(--success)">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Since 2014</h3>
+            <p style="color: var(--text-secondary)">Over a decade of football excellence</p>
+          </div>
+          <div class="card rounded-xl p-6 text-center hover:shadow-xl">
+            <div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style="background-color: var(--warning)">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Open Door Policy</h3>
+            <p style="color: var(--text-secondary)">Visitors always welcome to join sessions</p>
+          </div>
+        </div>
+      </section>
     </div>
-    <div class="overlay"></div>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-      <img src="./assets/images/hero.png" alt="Soccer field" class="hero-image" />
-      <div class="hero-overlay"></div>
-      <div class="container">
-        <div class="hero-content">
-          <h1 class="hero-title">Welcome to Turf FC</h1>
-          <p class="hero-subtitle">Where passion meets the beautiful game</p>
-          <a href="#contact" class="cta-button">Request a Friendly Match</a>
+    <!-- About Page -->
+    <div id="about" class="page">
+      <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <h1 class="text-4xl md:text-5xl font-bold mb-12 text-center">About Turf FC</h1>
+        <div class="card rounded-xl p-8 md:p-12 space-y-6 text-lg leading-relaxed">
+          <p>Founded in 2014 by a group of passionate work colleagues, Turf FC has blossomed into a vibrant community that spans generations. What began as casual kickabouts among friends has evolved into a structured club that embraces players of all ages—from energetic youth to experienced elders.</p>
+          <p>Our philosophy centers on inclusivity and the pure joy of the beautiful game. We foster an environment where camaraderie and sportsmanship take center stage, creating lasting bonds both on and off the pitch.</p>
+          <p>Visitors are always welcome to join our sessions, with many guests finding themselves seamlessly integrated into our community. Through our open-door policy, casual players often transition into regular participants and eventually become full-fledged members of the Turf FC family.</p>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
 
-    <!-- About Section -->
-    <section class="section" id="about">
-      <div class="container">
-        <h2 class="section-title">About Us</h2>
-        <div class="about-content">
-          <div class="about-image">
-            <img src="./assets/images/about.png" alt="Turf FC team" id="about-image" />
-          </div>
-          <div class="about-text">
-            <p>
-              Founded in 2014 by a group of passionate work colleagues, Turf FC has blossomed into a vibrant community that spans generations. What began as casual kickabouts among friends has evolved
-              into a structured club that embraces players of all ages—from energetic youth to experienced elders.
-            </p>
-            <p>
-              Our philosophy centers on inclusivity and the pure joy of the beautiful game. We foster an environment where camaraderie and sportsmanship take center stage, creating lasting bonds both
-              on and off the pitch.
-            </p>
-            <p>
-              Visitors are always welcome to join our sessions, with many guests finding themselves seamlessly integrated into our community. Through our open-door policy, casual players often
-              transition into regular participants and eventually become full-fledged members of the Turf FC family.
-            </p>
-            <a href="#contact" class="cta-button">Join Our Community</a>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- Contact Page -->
+    <div id="contact" class="page">
+      <section class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <h1 class="text-4xl md:text-5xl font-bold mb-8 text-center">Get In Touch</h1>
+        <p class="text-center text-lg mb-12" style="color: var(--text-secondary)">Whether you want to join our club or arrange a friendly match, we'd love to hear from you.</p>
 
-    <!-- Contact Section -->
-    <section class="contact-section" id="contact">
-      <div class="container">
-        <h2 class="section-title">Get In Touch</h2>
-
-        <div class="tab-container">
-          <div class="tab-buttons">
-            <button class="tab-button active" data-tab="general">General Inquiry</button>
-            <button class="tab-button" data-tab="fixture">Request Fixture</button>
-          </div>
+        <div class="segmented-control mb-8 flex justify-center">
+          <button class="segmented-button active" data-form="join">Request to Join</button>
+          <button class="segmented-button" data-form="friendly">Request Friendly Match</button>
         </div>
 
-        <div class="tab-content active" id="general-tab">
-          <form class="contact-form" id="general-form">
-            <div class="form-row">
-              <div class="form-col">
-                <div class="form-group">
-                  <label for="name" class="form-label">Full Name</label>
-                  <input type="text" id="name" class="form-input" placeholder="Your name" required />
-                </div>
-              </div>
-              <div class="form-col">
-                <div class="form-group">
-                  <label for="email" class="form-label">Email Address</label>
-                  <input type="email" id="email" class="form-input" placeholder="Your email" required />
-                </div>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-col">
-                <div class="form-group">
-                  <label for="phone" class="form-label">Phone Number</label>
-                  <input type="tel" id="phone" class="form-input" placeholder="Your phone number" />
-                </div>
-              </div>
-              <div class="form-col">
-                <div class="form-group">
-                  <label for="subject" class="form-label">Subject</label>
-                  <input type="text" id="subject" class="form-input" placeholder="Subject of your message" required />
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="message" class="form-label">Message</label>
-              <textarea id="message" class="form-textarea" placeholder="Your message" required></textarea>
-            </div>
-
-            <button type="submit" class="submit-button">Send Message</button>
-          </form>
-        </div>
-
-        <div class="tab-content" id="fixture-tab">
-          <form class="contact-form" id="fixture-form">
-            <div class="form-row">
-              <div class="form-col">
-                <div class="form-group">
-                  <label for="team-name" class="form-label">Team Name</label>
-                  <input type="text" id="team-name" class="form-input" placeholder="Your team name" required />
-                </div>
-              </div>
-              <div class="form-col">
-                <div class="form-group">
-                  <label for="team-email" class="form-label">Team Email</label>
-                  <input type="email" id="team-email" class="form-input" placeholder="Team contact email" required />
-                </div>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-col">
-                <div class="form-group">
-                  <label for="team-phone" class="form-label">Team Phone</label>
-                  <input type="tel" id="team-phone" class="form-input" placeholder="Team contact phone" required />
-                </div>
-              </div>
-              <div class="form-col">
-                <div class="form-group">
-                  <label for="team-turf" class="form-label">Home Turf</label>
-                  <input type="text" id="team-turf" class="form-input" placeholder="Your home ground location" required />
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="fixture-date" class="form-label">Preferred Date & Time</label>
-              <input type="datetime-local" id="fixture-date" class="form-input" required />
-            </div>
-
-            <div class="form-group">
-              <label for="fixture-message" class="form-label">Message (Info & Arrangements)</label>
-              <textarea id="fixture-message" class="form-textarea" placeholder="Details about the proposed fixture, team information, and any special arrangements" required></textarea>
-            </div>
-
-            <button type="submit" class="submit-button">Request Fixture</button>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-      <div class="container">
-        <div class="footer-container">
-          <div class="footer-col">
-            <img src="./assets/images/logo.png" alt="Turf FC Logo" class="logo" style="height: 60px; margin-bottom: 20px" />
-            <p>Where passion meets the beautiful game. Join our community of football enthusiasts today.</p>
-            <div class="social-links">
-              <a href="#" class="social-link">FB</a>
-              <a href="#" class="social-link">TW</a>
-              <a href="#" class="social-link">IG</a>
-              <a href="#" class="social-link">YT</a>
-            </div>
+        <!-- Join Form -->
+        <form id="joinForm" class="card rounded-xl p-8 space-y-6">
+          <div>
+            <label class="block mb-2 font-medium">Full Name</label>
+            <input type="text" class="form-input w-full px-4 py-3 rounded-lg" placeholder="John Doe" required />
           </div>
-
-          <div class="footer-col">
-            <h3 class="footer-title">Quick Links</h3>
-            <ul class="footer-links">
-              <li><a href="#home">Home</a></li>
-              <li><a href="#about">About Us</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
+          <div>
+            <label class="block mb-2 font-medium">Email</label>
+            <input type="email" class="form-input w-full px-4 py-3 rounded-lg" placeholder="john@example.com" required />
           </div>
+          <div>
+            <label class="block mb-2 font-medium">Phone Number</label>
+            <input type="tel" class="form-input w-full px-4 py-3 rounded-lg" placeholder="+1 234 567 8900" />
+          </div>
+          <div>
+            <label class="block mb-2 font-medium">Age Group</label>
+            <select class="form-input w-full px-4 py-3 rounded-lg">
+              <option>Youth (Under 18)</option>
+              <option>Adult (18-35)</option>
+              <option>Senior (35+)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block mb-2 font-medium">Playing Experience</label>
+            <textarea class="form-input w-full px-4 py-3 rounded-lg" rows="4" placeholder="Tell us about your football background..."></textarea>
+          </div>
+          <button type="submit" class="btn-primary w-full py-3 rounded-lg font-semibold">Submit Request</button>
+        </form>
 
-          <div class="footer-col">
-            <h3 class="footer-title">Contact Us</h3>
-            <div class="contact-info">
-              <span class="contact-icon">📍</span>
-              <p>43 Accra St, Wuse, Abuja 904101, Federal Capital Territory</p>
-            </div>
-            <div class="contact-info">
-              <span class="contact-icon">📞</span>
-              <p>+234 803 781 9251</p>
-            </div>
-            <div class="contact-info">
-              <span class="contact-icon">✉️</span>
-              <p>info@turffc.club</p>
-            </div>
+        <!-- Friendly Match Form -->
+        <form id="friendlyForm" class="card rounded-xl p-8 space-y-6 hidden">
+          <div>
+            <label class="block mb-2 font-medium">Club/Team Name</label>
+            <input type="text" class="form-input w-full px-4 py-3 rounded-lg" placeholder="Your team name" required />
+          </div>
+          <div>
+            <label class="block mb-2 font-medium">Contact Person</label>
+            <input type="text" class="form-input w-full px-4 py-3 rounded-lg" placeholder="Full name" required />
+          </div>
+          <div>
+            <label class="block mb-2 font-medium">Email</label>
+            <input type="email" class="form-input w-full px-4 py-3 rounded-lg" placeholder="contact@example.com" required />
+          </div>
+          <div>
+            <label class="block mb-2 font-medium">Phone Number</label>
+            <input type="tel" class="form-input w-full px-4 py-3 rounded-lg" placeholder="+1 234 567 8900" required />
+          </div>
+          <div>
+            <label class="block mb-2 font-medium">Preferred Date Range</label>
+            <input type="text" class="form-input w-full px-4 py-3 rounded-lg" placeholder="e.g., March 15-30, 2024" />
+          </div>
+          <div>
+            <label class="block mb-2 font-medium">Additional Information</label>
+            <textarea class="form-input w-full px-4 py-3 rounded-lg" rows="4" placeholder="Team size, preferred location, any special requirements..."></textarea>
+          </div>
+          <button type="submit" class="btn-primary w-full py-3 rounded-lg font-semibold">Send Request</button>
+        </form>
+      </section>
+    </div>
+
+    <!-- Media Page -->
+    <div id="media" class="page">
+      <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <h1 class="text-4xl md:text-5xl font-bold mb-8 text-center">Media Gallery</h1>
+
+        <div class="flex justify-center mb-8">
+          <div class="segmented-control">
+            <button class="segmented-button active" data-media="images">Images</button>
+            <button class="segmented-button" data-media="videos">Videos</button>
           </div>
         </div>
 
-        <div class="copyright">
-          <p>&copy; 2025 Turf FC. All rights reserved.</p>
+        <!-- Images Carousel -->
+        <div id="imagesGallery" class="carousel-container card rounded-xl overflow-hidden">
+          <div class="carousel-track" id="imageTrack">
+            <div class="carousel-item flex items-center justify-center" style="background: linear-gradient(135deg, var(--primary) 0%, #5a3fb8 100%)">
+              <div class="text-white text-center p-8">
+                <svg class="w-32 h-32 mx-auto mb-4 opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+                </svg>
+                <p class="text-xl font-semibold">Team Training Session</p>
+              </div>
+            </div>
+            <div class="carousel-item flex items-center justify-center" style="background: linear-gradient(135deg, var(--success) 0%, #8bc970 100%)">
+              <div class="text-white text-center p-8">
+                <svg class="w-32 h-32 mx-auto mb-4 opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+                </svg>
+                <p class="text-xl font-semibold">Championship Victory</p>
+              </div>
+            </div>
+            <div class="carousel-item flex items-center justify-center" style="background: linear-gradient(135deg, var(--warning) 0%, #f5ed75 100%)">
+              <div class="text-white text-center p-8">
+                <svg class="w-32 h-32 mx-auto mb-4 opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
+                </svg>
+                <p class="text-xl font-semibold">Community Outreach</p>
+              </div>
+            </div>
+          </div>
+          <button class="absolute left-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-3 transition" onclick="moveCarousel('image', -1)">
+            <svg class="w-6 h-6" fill="none" stroke="var(--primary)" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button class="absolute right-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-3 transition" onclick="moveCarousel('image', 1)">
+            <svg class="w-6 h-6" fill="none" stroke="var(--primary)" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2" id="imageDots"></div>
         </div>
-      </div>
-    </footer>
 
-    <!-- Success Modal -->
-    <div class="modal" id="success-modal">
-      <div class="modal-content">
-        <div class="success-icon">✓</div>
-        <h3 class="modal-title">Message Sent Successfully!</h3>
-        <p class="modal-text">Thank you for reaching out. A club representative will get back to you within 2 days.</p>
-        <button class="modal-button" id="close-modal">Close</button>
-      </div>
+        <!-- Videos Carousel -->
+        <div id="videosGallery" class="carousel-container card rounded-xl overflow-hidden hidden">
+          <div class="carousel-track" id="videoTrack">
+            <div class="carousel-item flex items-center justify-center" style="background: linear-gradient(135deg, var(--error) 0%, #e15055 100%)">
+              <div class="text-white text-center p-8">
+                <svg class="w-32 h-32 mx-auto mb-4 opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" />
+                </svg>
+                <p class="text-xl font-semibold">Match Highlights</p>
+              </div>
+            </div>
+            <div class="carousel-item flex items-center justify-center" style="background: linear-gradient(135deg, var(--primary) 0%, #5a3fb8 100%)">
+              <div class="text-white text-center p-8">
+                <svg class="w-32 h-32 mx-auto mb-4 opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" />
+                </svg>
+                <p class="text-xl font-semibold">Skills Training</p>
+              </div>
+            </div>
+          </div>
+          <button class="absolute left-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-3 transition" onclick="moveCarousel('video', -1)">
+            <svg class="w-6 h-6" fill="none" stroke="var(--primary)" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button class="absolute right-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-3 transition" onclick="moveCarousel('video', 1)">
+            <svg class="w-6 h-6" fill="none" stroke="var(--primary)" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2" id="videoDots"></div>
+        </div>
+      </section>
     </div>
 
     <script>
-      function setLogo(theme) {
-        document.querySelectorAll(".logo").forEach((logoContainer) => (logoContainer.src = `./assets/images/logo-${theme ?? "light"}.png`))
+      // Theme Toggle
+      const themeToggle = document.getElementById("themeToggle")
+      const html = document.documentElement
+
+      // Check for saved theme preference or default to 'light'
+      const currentTheme = localStorage.getItem("theme") || "light"
+      html.setAttribute("data-theme", currentTheme)
+      if (currentTheme === "dark") {
+        themeToggle.classList.add("active")
       }
 
-      // Dark/Light Mode Toggle
-      function initTheme() {
-        const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)")
-        const storedTheme = localStorage.getItem("theme")
-        setLogo(storedTheme)
-
-        if (storedTheme === "dark" || (!storedTheme && prefersDarkScheme.matches)) {
-          document.body.setAttribute("data-theme", "dark")
-          document.querySelectorAll(".dark-icon").forEach((icon) => (icon.style.display = "inline"))
-          document.querySelectorAll(".light-icon").forEach((icon) => (icon.style.display = "none"))
-        } else {
-          document.body.setAttribute("data-theme", "light")
-          document.querySelectorAll(".light-icon").forEach((icon) => (icon.style.display = "inline"))
-          document.querySelectorAll(".dark-icon").forEach((icon) => (icon.style.display = "none"))
-        }
-      }
-
-      initTheme()
-
-      document.querySelectorAll(".theme-toggle").forEach((button) => {
-        button.addEventListener("click", () => {
-          const currentTheme = document.body.getAttribute("data-theme") || "light"
-          const newTheme = currentTheme === "light" ? "dark" : "light"
-          setLogo(newTheme)
-
-          document.body.setAttribute("data-theme", newTheme)
-          localStorage.setItem("theme", newTheme)
-
-          if (newTheme === "dark") {
-            document.querySelectorAll(".dark-icon").forEach((icon) => (icon.style.display = "inline"))
-            document.querySelectorAll(".light-icon").forEach((icon) => (icon.style.display = "none"))
-          } else {
-            document.querySelectorAll(".light-icon").forEach((icon) => (icon.style.display = "inline"))
-            document.querySelectorAll(".dark-icon").forEach((icon) => (icon.style.display = "none"))
-          }
-        })
+      themeToggle.addEventListener("click", () => {
+        const newTheme = html.getAttribute("data-theme") === "light" ? "dark" : "light"
+        html.setAttribute("data-theme", newTheme)
+        localStorage.setItem("theme", newTheme)
+        themeToggle.classList.toggle("active")
+        setLogo(newTheme)
       })
 
-      // Tab Switching
-      const tabButtons = document.querySelectorAll(".tab-button")
-      const tabContents = document.querySelectorAll(".tab-content")
+      setLogo(currentTheme)
 
-      tabButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          const tabId = button.getAttribute("data-tab")
-
-          // Update active button
-          tabButtons.forEach((btn) => btn.classList.remove("active"))
-          button.classList.add("active")
-
-          // Show active tab content
-          tabContents.forEach((content) => content.classList.remove("active"))
-          document.getElementById(tabId + "-tab").classList.add("active")
-        })
-      })
-
-      // Form Submission
-      document.querySelectorAll("form").forEach((form) => {
-        form.addEventListener("submit", (e) => {
-          e.preventDefault()
-
-          // In a real implementation, you would send the form data to your backend here
-          // For now, we'll just show the success modal
-          document.getElementById("success-modal").style.display = "flex"
-          setTimeout(() => {
-            document.querySelector(".modal-content").style.opacity = "1"
-            document.querySelector(".modal-content").style.transform = "translateY(0)"
-          }, 10)
-
-          // Reset form
-          form.reset()
-        })
-      })
-
-      // Close Modal
-      document.getElementById("close-modal").addEventListener("click", () => {
-        document.querySelector(".modal-content").style.opacity = "0"
-        document.querySelector(".modal-content").style.transform = "translateY(20px)"
-
-        setTimeout(() => {
-          document.getElementById("success-modal").style.display = "none"
-        }, 300)
-      })
-
-      // Mobile Menu
-      const mobileMenuBtn = document.querySelector(".mobile-menu-btn")
-      const closeMenuBtn = document.querySelector(".close-menu")
-      const mobileMenu = document.querySelector(".mobile-menu")
-      const overlay = document.querySelector(".overlay")
-      const mobileNavLinks = document.querySelectorAll(".mobile-nav-links a")
+      // Mobile Menu Toggle
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn")
+      const mobileMenu = document.getElementById("mobileMenu")
 
       mobileMenuBtn.addEventListener("click", () => {
-        mobileMenu.classList.add("active")
-        overlay.classList.add("active")
-        document.body.style.overflow = "hidden"
+        mobileMenu.classList.toggle("hidden")
       })
 
-      function closeMenu() {
-        mobileMenu.classList.remove("active")
-        overlay.classList.remove("active")
-        document.body.style.overflow = ""
+      // Page Navigation
+      const pages = document.querySelectorAll(".page")
+      const navLinks = document.querySelectorAll(".nav-link[data-page]")
+
+      function setLogo(theme) {
+        document.querySelectorAll(".logo").forEach((logoContainer) => (logoContainer.src = `./assets/images/logo-${currentTheme}.png`))
       }
 
-      closeMenuBtn.addEventListener("click", closeMenu)
-      overlay.addEventListener("click", closeMenu)
+      function showPage(pageName) {
+        pages.forEach((page) => {
+          page.classList.remove("active")
+          if (page.id === pageName) {
+            page.classList.add("active")
+          }
+        })
 
-      mobileNavLinks.forEach((link) => {
-        link.addEventListener("click", closeMenu)
+        navLinks.forEach((link) => {
+          link.classList.remove("active")
+          if (link.getAttribute("data-page") === pageName) {
+            link.classList.add("active")
+          }
+        })
+
+        // Close mobile menu
+        mobileMenu.classList.add("hidden")
+
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: "smooth" })
+      }
+
+      navLinks.forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault()
+          const pageName = link.getAttribute("data-page")
+          showPage(pageName)
+        })
       })
 
-      // Smooth scrolling for anchor links
-      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-        anchor.addEventListener("click", function (e) {
-          e.preventDefault()
+      // Contact Form Toggle
+      const segmentedButtons = document.querySelectorAll(".segmented-button[data-form]")
+      const joinForm = document.getElementById("joinForm")
+      const friendlyForm = document.getElementById("friendlyForm")
 
-          const targetId = this.getAttribute("href")
-          const targetElement = document.querySelector(targetId)
+      segmentedButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          segmentedButtons.forEach((btn) => btn.classList.remove("active"))
+          button.classList.add("active")
 
-          if (targetElement) {
-            const headerOffset = 80
-            const elementPosition = targetElement.getBoundingClientRect().top
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: "smooth",
-            })
+          const formType = button.getAttribute("data-form")
+          if (formType === "join") {
+            joinForm.classList.remove("hidden")
+            friendlyForm.classList.add("hidden")
+          } else {
+            joinForm.classList.add("hidden")
+            friendlyForm.classList.remove("hidden")
           }
         })
       })
 
-      // Handle sticky header
-      window.addEventListener("scroll", () => {
-        const header = document.querySelector("header")
-        if (window.scrollY > 50) {
-          header.style.boxShadow = "0 2px 10px rgba(0, 0, 0, 0.1)"
-        } else {
-          header.style.boxShadow = "none"
-        }
+      // Form Submissions
+      joinForm.addEventListener("submit", (e) => {
+        e.preventDefault()
+        alert("Thank you for your interest in joining Turf FC! We will contact you soon.")
+        joinForm.reset()
       })
+
+      friendlyForm.addEventListener("submit", (e) => {
+        e.preventDefault()
+        alert("Thank you for your friendly match request! We will get back to you shortly.")
+        friendlyForm.reset()
+      })
+
+      // Media Gallery Toggle
+      const mediaButtons = document.querySelectorAll(".segmented-button[data-media]")
+      const imagesGallery = document.getElementById("imagesGallery")
+      const videosGallery = document.getElementById("videosGallery")
+
+      mediaButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          mediaButtons.forEach((btn) => btn.classList.remove("active"))
+          button.classList.add("active")
+
+          const mediaType = button.getAttribute("data-media")
+          if (mediaType === "images") {
+            imagesGallery.classList.remove("hidden")
+            videosGallery.classList.add("hidden")
+          } else {
+            imagesGallery.classList.add("hidden")
+            videosGallery.classList.remove("hidden")
+          }
+        })
+      })
+
+      // Carousel Logic
+      const carousels = {
+        image: {
+          track: document.getElementById("imageTrack"),
+          currentIndex: 0,
+          totalItems: 3,
+        },
+        video: {
+          track: document.getElementById("videoTrack"),
+          currentIndex: 0,
+          totalItems: 2,
+        },
+      }
+
+      function updateCarousel(type) {
+        const carousel = carousels[type]
+        const offset = -carousel.currentIndex * 100
+        carousel.track.style.transform = `translateX(${offset}%)`
+        updateDots(type)
+      }
+
+      function moveCarousel(type, direction) {
+        const carousel = carousels[type]
+        carousel.currentIndex += direction
+
+        if (carousel.currentIndex < 0) {
+          carousel.currentIndex = carousel.totalItems - 1
+        } else if (carousel.currentIndex >= carousel.totalItems) {
+          carousel.currentIndex = 0
+        }
+
+        updateCarousel(type)
+      }
+
+      function updateDots(type) {
+        const carousel = carousels[type]
+        const dotsContainer = document.getElementById(`${type}Dots`)
+        dotsContainer.innerHTML = ""
+
+        for (let i = 0; i < carousel.totalItems; i++) {
+          const dot = document.createElement("div")
+          dot.className = `w-2 h-2 rounded-full cursor-pointer transition ${i === carousel.currentIndex ? "bg-white" : "bg-white bg-opacity-50"}`
+          dot.onclick = () => {
+            carousel.currentIndex = i
+            updateCarousel(type)
+          }
+          dotsContainer.appendChild(dot)
+        }
+      }
+
+      // Initialize carousels
+      updateDots("image")
+      updateDots("video")
+
+      // Touch/Swipe support for carousels
+      let touchStartX = 0
+      let touchEndX = 0
+
+      function handleSwipe(type) {
+        const diff = touchStartX - touchEndX
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) {
+            moveCarousel(type, 1)
+          } else {
+            moveCarousel(type, -1)
+          }
+        }
+      }
+
+      ;[imagesGallery, videosGallery].forEach((gallery, index) => {
+        const type = index === 0 ? "image" : "video"
+
+        gallery.addEventListener("touchstart", (e) => {
+          touchStartX = e.changedTouches[0].screenX
+        })
+
+        gallery.addEventListener("touchend", (e) => {
+          touchEndX = e.changedTouches[0].screenX
+          handleSwipe(type)
+        })
+      })
+
+      // Auto-advance carousels
+      setInterval(() => {
+        if (!imagesGallery.classList.contains("hidden")) {
+          moveCarousel("image", 1)
+        }
+        if (!videosGallery.classList.contains("hidden")) {
+          moveCarousel("video", 1)
+        }
+      }, 5000)
     </script>
   </body>
 </html>
