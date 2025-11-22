@@ -190,6 +190,7 @@
           <button class="tab-btn tab-active px-3 md:px-4 py-2 text-xs md:text-sm font-medium rounded-t-md whitespace-nowrap" data-tab="standings">Standings</button>
           <button class="tab-btn px-3 md:px-4 py-2 text-xs md:text-sm font-medium rounded-t-md whitespace-nowrap hover:bg-tertiary" data-tab="fixtures">Fixtures</button>
           <button class="tab-btn px-3 md:px-4 py-2 text-xs md:text-sm font-medium rounded-t-md whitespace-nowrap hover:bg-tertiary" data-tab="teams">Teams</button>
+          <button class="tab-btn px-3 md:px-4 py-2 text-xs md:text-sm font-medium rounded-t-md whitespace-nowrap hover:bg-tertiary" data-tab="goals">Goals</button>
         </nav>
       </div>
     </div>
@@ -240,10 +241,29 @@
       <div id="teamsTab" class="hidden">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4" id="teamsContainer"></div>
       </div>
+
+      <!-- Goals Tab -->
+      <div id="goalsTab" class="hidden">
+        <div class="bg-secondary rounded-lg border border-custom overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full standings-table">
+              <thead class="bg-tertiary">
+                <tr>
+                  <th class="text-left px-2 md:px-4 py-2 font-semibold">#</th>
+                  <th class="text-left px-2 md:px-4 py-2 font-semibold">Player</th>
+                  <th class="text-left px-2 md:px-4 py-2 font-semibold">Team</th>
+                  <th class="text-center px-2 md:px-4 py-2 font-semibold">Goals</th>
+                </tr>
+              </thead>
+              <tbody id="goalsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </main>
 
     <script>
-      const API_BASE_URL = "https://api.turffc.club"
+      const API_BASE_URL = "http://localhost:5000"
       let competitions = []
       let teams = []
       let players = []
@@ -288,6 +308,7 @@
         document.getElementById("standingsTab").classList.add("hidden")
         document.getElementById("fixturesTab").classList.add("hidden")
         document.getElementById("teamsTab").classList.add("hidden")
+        document.getElementById("goalsTab").classList.add("hidden")
 
         document.getElementById(`${tabName}Tab`).classList.remove("hidden")
       }
@@ -344,6 +365,7 @@
           document.getElementById("standingsTab").classList.add("hidden")
           document.getElementById("fixturesTab").classList.add("hidden")
           document.getElementById("teamsTab").classList.add("hidden")
+          document.getElementById("goalsTab").classList.add("hidden")
           return
         }
 
@@ -356,6 +378,7 @@
         renderStandings()
         renderFixtures()
         renderTeams()
+        renderGoals()
       }
 
       // Calculate Standings
@@ -592,6 +615,93 @@
                 `
 
           container.appendChild(card)
+        })
+      }
+
+      // Calculate Goalscorers
+      function calculateGoalscorers() {
+        const goalscorers = {}
+
+        // Filter events for goals only (excluding own goals)
+        const goalEvents = events.filter((event) => event.title === "Goal")
+
+        // Count goals for each player
+        goalEvents.forEach((event) => {
+          event.participants.forEach((playerId) => {
+            if (!goalscorers[playerId]) {
+              goalscorers[playerId] = 0
+            }
+            goalscorers[playerId]++
+          })
+        })
+
+        // Convert to array and sort by goals
+        const sortedGoalscorers = Object.entries(goalscorers)
+          .map(([playerId, goals]) => ({
+            playerId,
+            goals,
+          }))
+          .sort((a, b) => b.goals - a.goals)
+
+        return sortedGoalscorers
+      }
+
+      function renderGoals() {
+        const goalscorers = calculateGoalscorers()
+        const tbody = document.getElementById("goalsBody")
+        tbody.innerHTML = ""
+
+        if (goalscorers.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="4" class="px-4 py-8 text-center text-muted">
+                No goals scored in this competition yet
+              </td>
+            </tr>
+          `
+          return
+        }
+
+        goalscorers.forEach((scorer, index) => {
+          const player = players.find((p) => (p.id || p._id) === scorer.playerId)
+          if (!player) return
+
+          const team = teams.find((t) => (t.id || t._id) === player.team)
+
+          const tr = document.createElement("tr")
+          tr.className = "border-b border-custom hover:bg-tertiary"
+          tr.innerHTML = `
+            <td class="px-2 md:px-4 py-2 font-semibold">${index + 1}</td>
+            <td class="px-2 md:px-4 py-2">
+              <div class="flex items-center space-x-2">
+                ${
+                  player.imageUrl || player.image
+                    ? `<img src="${player.imageUrl || player.image}" alt="${player.firstName}" class="player-avatar">`
+                    : `<div class="player-avatar flex items-center justify-center bg-tertiary font-bold text-xs md:text-sm">
+                        ${player.firstName[0]}${player.lastName[0]}
+                      </div>`
+                }
+                <div>
+                  <div class="font-medium">${player.firstName} ${player.lastName}</div>
+                  ${player.alias ? `<div class="text-xs text-muted">${player.alias}</div>` : ""}
+                </div>
+              </div>
+            </td>
+            <td class="px-2 md:px-4 py-2">
+              ${
+                team
+                  ? `
+                <div class="flex items-center space-x-2">
+                  <span class="team-color-badge" style="background-color: ${team.color || team.teamColor}"></span>
+                  <span>${team.alias || team.teamName}</span>
+                </div>
+              `
+                  : "N/A"
+              }
+            </td>
+            <td class="text-center px-2 md:px-4 py-2 font-bold text-lg">${scorer.goals}</td>
+          `
+          tbody.appendChild(tr)
         })
       }
 
