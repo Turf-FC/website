@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MyTurf Account</title>
+    <title>Sports Competition Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       :root {
@@ -268,11 +268,12 @@
     </style>
   </head>
   <body class="font-sans antialiased">
+    <!-- Login Page -->
     <div id="loginPage" class="hidden min-h-screen flex items-center justify-center bg-primary px-4">
       <div class="bg-secondary p-6 md:p-8 rounded-lg shadow-xl w-full max-w-md">
         <div class="text-center mb-6 md:mb-8">
           <div class="w-16 h-16 md:w-20 md:h-20 bg-primary rounded-full mx-auto flex items-center justify-center text-white text-xl md:text-2xl font-bold">SC</div>
-          <h1 class="text-xl md:text-2xl font-bold mt-4 text-primary">MyTurf Account</h1>
+          <h1 class="text-xl md:text-2xl font-bold mt-4 text-primary">Sports Competition Admin</h1>
           <p class="text-secondary mt-2 text-sm md:text-base">Sign in to manage your competitions</p>
         </div>
         <form id="loginForm">
@@ -290,7 +291,9 @@
       </div>
     </div>
 
+    <!-- Main Dashboard -->
     <div id="dashboard" class="hidden min-h-screen flex flex-col md:flex-row">
+      <!-- Desktop Sidebar -->
       <div class="hidden md:block w-64 bg-secondary border-r border-custom">
         <div class="p-4">
           <div class="flex items-center space-x-3">
@@ -351,6 +354,7 @@
         </div>
       </div>
 
+      <!-- Mobile Bottom Navigation -->
       <div class="fixed bottom-0 left-0 right-0 bg-secondary border-t border-custom z-40 md:hidden">
         <nav class="flex justify-around items-center h-16">
           <a href="#" data-entity="competitions" class="bottom-nav-item flex-1 flex flex-col items-center justify-center text-xs cursor-pointer py-2">
@@ -386,7 +390,9 @@
         </nav>
       </div>
 
+      <!-- Main Content -->
       <div class="flex-1 flex flex-col mb-16 md:mb-0">
+        <!-- Header -->
         <header class="bg-secondary border-b border-custom px-4 md:px-6 py-3 md:py-4">
           <div class="flex items-center justify-between">
             <div class="flex-1 min-w-0">
@@ -422,7 +428,9 @@
           </div>
         </header>
 
+        <!-- Content Area -->
         <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
+          <!-- List Panel -->
           <div class="flex-1 md:w-3/5 bg-primary border-r border-custom overflow-y-auto custom-scrollbar">
             <div class="p-3 md:p-4 border-b border-custom">
               <input type="text" id="searchInput" placeholder="Search..." class="w-full px-3 md:px-4 py-2 rounded-md border border-custom text-sm md:text-base" />
@@ -435,6 +443,7 @@
             </div>
           </div>
 
+          <!-- Desktop Form Panel -->
           <div class="hidden md:block w-2/5 bg-secondary p-6 overflow-y-auto custom-scrollbar">
             <h2 class="text-xl font-bold text-primary mb-4">Add New Item</h2>
             <form id="entityForm">
@@ -446,6 +455,7 @@
             </form>
           </div>
 
+          <!-- Mobile Form Overlay -->
           <div id="mobileFormOverlay" class="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30 hidden">
             <div class="mobile-form-overlay absolute bottom-0 left-0 right-0 bg-secondary rounded-t-3xl max-h-[85vh] overflow-hidden flex flex-col pb-20">
               <div class="p-4 border-b border-custom flex items-center justify-between">
@@ -471,6 +481,7 @@
       </div>
     </div>
 
+    <!-- Mobile Menu Overlay -->
     <div id="mobileMenuOverlay" class="md:hidden fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
       <div class="absolute right-0 top-0 bottom-0 w-64 bg-secondary">
         <div class="p-4 border-b border-custom flex items-center justify-between">
@@ -491,8 +502,10 @@
       </div>
     </div>
 
+    <!-- Toast Container -->
     <div id="toastContainer" class="fixed top-4 right-4 z-50"></div>
 
+    <!-- Confirmation Dialog -->
     <div id="confirmDialog" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
       <div class="bg-secondary p-6 rounded-lg max-w-md w-full">
         <h3 class="text-xl font-bold text-primary mb-3">Confirm Action</h3>
@@ -627,8 +640,7 @@
             { name: "finalScore", label: "Final Score", type: "text", required: false, placeholder: "2-1" },
             // { name: "events", label: "Events", type: "multi-select-events", required: false },
           ],
-          // UPDATED COLUMNS to include Home and Away teams
-          columns: ["ID", "Kick-off Time", "Home Team", "Away Team", "Venue", "Referee", "Final Score"],
+          columns: ["ID", "Kick-off Time", "Venue", "Referee", "Final Score"],
         },
 
         events: {
@@ -872,15 +884,12 @@
           const url = `/${entity}${showArchived ? "?includeArchived=true" : ""}`
           entityData = await makeRequest(url)
           renderList()
-          // UPDATED: Render BOTH desktop and mobile forms so the DOM elements exist
-          renderForm(false)
-          renderForm(true)
+          renderForm()
         } catch (error) {
           showToast("Failed to load data", "error")
           entityData = []
           renderList()
-          renderForm(false)
-          renderForm(true)
+          renderForm()
         }
       }
 
@@ -994,16 +1003,9 @@
                         <td class="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm">${item.primaryPosition}</td>
                     `
           } else if (currentEntity === "fixtures") {
-            // UPDATED: Logic to find home/away team names from participants array
-            const [homeId, awayId] = item.participants || []
-            const homeTeam = teamsData.find((t) => (t.id || t._id) === homeId)
-            const awayTeam = teamsData.find((t) => (t.id || t._id) === awayId)
-
             html += `
                         <td class="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm">${itemId}</td>
                         <td class="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm">${formatDate(item.starts)}</td>
-                        <td class="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm font-medium">${homeTeam ? homeTeam.alias || homeTeam.teamName : "Unknown"}</td>
-                        <td class="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm font-medium">${awayTeam ? awayTeam.alias || awayTeam.teamName : "Unknown"}</td>
                         <td class="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm">${item.venue || "Mo Arena"}</td>
                         <td class="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm">${item.referee || "-"}</td>
                         <td class="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm">${item.finalScore || "-"}</td>
@@ -1107,8 +1109,8 @@
                                   player.imageUrl || player.image
                                     ? `<img src="${player.imageUrl || player.image}" alt="${player.firstName}" class="player-image mr-3">`
                                     : `<div class="player-image mr-3 flex items-center justify-center bg-secondary text-primary">
-                                    <span class="text-lg md:text-xl font-bold">${player.firstName[0]}${player.lastName[0]}</span>
-                                </div>`
+                                        <span class="text-lg md:text-xl font-bold">${player.firstName[0]}${player.lastName[0]}</span>
+                                    </div>`
                                 }
                                 <div>
                                     <div class="font-medium text-sm md:text-base">${player.firstName} ${player.lastName}</div>
@@ -1138,7 +1140,7 @@
       // Event Type Selection Handler
       function handleEventTypeChange(isMobile = false) {
         const prefix = isMobile ? "mobile-" : ""
-        const selectElement = isMobile ? document.querySelector(`#mobileEntityForm select[name="title"]`) : document.querySelector(`#entityForm select[name="title"]`)
+        const selectElement = document.querySelector(`select[name="eventType"]`)
         const helperElement = document.getElementById(`${prefix}eventType-helper`)
 
         if (selectElement && helperElement) {
@@ -1158,8 +1160,7 @@
       // Ordered Participants Management
       function addParticipant(isMobile = false) {
         const prefix = isMobile ? "mobile-" : ""
-        const formId = isMobile ? "#mobileEntityForm" : "#entityForm"
-        const selectElement = document.querySelector(`${formId} select[name="participant-select"]`)
+        const selectElement = document.querySelector(`select[name="participant-select"]`)
 
         if (!selectElement || !selectElement.value) {
           showToast("Please select a participant", "warning")
@@ -1439,10 +1440,9 @@
             // Don't set Content-Type, let browser set it with boundary
           } else {
             // Convert to JSON
-            let jsonData = {}
-
             if (isFormData) {
               // Convert FormData to object
+              const jsonData = {}
               const config = entityConfigs[currentEntity]
 
               config.fields.forEach((field) => {
@@ -1451,6 +1451,7 @@
                 } else if (field.type === "multi-select" || field.type === "multi-select-players" || field.type === "multi-select-teams" || field.type === "multi-select-events") {
                   jsonData[field.name] = data.getAll(field.name)
                 } else if (field.type === "ordered-select-players") {
+                  console.log("Assigning ordered participants:", orderedParticipants)
                   jsonData[field.name] = orderedParticipants || []
                 } else if (field.type === "number") {
                   const value = data.get(field.name)
@@ -1459,23 +1460,10 @@
                   jsonData[field.name] = data.get(field.name) || null
                 }
               })
+              requestBody = JSON.stringify(jsonData)
             } else {
-              jsonData = data
+              requestBody = JSON.stringify(data)
             }
-
-            // UPDATED: Logic for Fixtures (combining Home/Away into participants array)
-            if (currentEntity === "fixtures") {
-              const homeTeam = jsonData.homeTeam
-              const awayTeam = jsonData.awayTeam
-              if (homeTeam && awayTeam) {
-                jsonData.participants = [homeTeam, awayTeam]
-              }
-              // Remove the temporary fields if you want to keep payload clean, though usually harmless
-              delete jsonData.homeTeam
-              delete jsonData.awayTeam
-            }
-
-            requestBody = JSON.stringify(jsonData)
             headers["Content-Type"] = "application/json"
           }
 
@@ -1521,15 +1509,8 @@
         event.stopPropagation()
         currentEditId = id
         orderedParticipants = []
-        // CLONE the item so we don't mutate the original data in the list
-        const item = { ...entityData.find((e) => (e.id || e._id) === id) }
+        const item = entityData.find((e) => (e.id || e._id) === id)
         if (!item) return
-
-        // UPDATED: Pre-processing for Fixtures to populate Home/Away selects
-        if (currentEntity === "fixtures" && item.participants && item.participants.length >= 2) {
-          item.homeTeam = item.participants[0]
-          item.awayTeam = item.participants[1]
-        }
 
         const form = document.getElementById("entityForm")
         const mobileForm = document.getElementById("mobileEntityForm")
@@ -1560,7 +1541,7 @@
               const prefix = isMobile ? "mobile-" : ""
               updateMultiSelect(`${prefix}${field.name}`, field.max || 999)
             } else if (field.type === "select-events") {
-              element.value = item.title || item.eventTitle || ""
+              element.value = item.eventType || item.eventTitle || ""
               handleEventTypeChange(isMobile)
             } else if (field.type === "datetime-local" && item[field.name]) {
               element.value = item[field.name].slice(0, 16)
@@ -1721,7 +1702,25 @@
           if (hasFileUpload) {
             await saveEntity(formData)
           } else {
-            await saveEntity(formData)
+            const data = {}
+            const config = entityConfigs[currentEntity]
+
+            config.fields.forEach((field) => {
+              if (field.type === "checkbox") {
+                data[field.name] = formData.has(field.name)
+              } else if (field.type === "multi-select" || field.type === "multi-select-players" || field.type === "multi-select-teams" || field.type === "multi-select-events") {
+                data[field.name] = formData.getAll(field.name)
+              } else if (field.type === "ordered-select-players") {
+                data[field.name] = orderedParticipants || []
+              } else if (field.type === "number") {
+                const value = formData.get(field.name)
+                data[field.name] = value ? parseInt(value) : null
+              } else if (field.type !== "file") {
+                data[field.name] = formData.get(field.name) || null
+              }
+            })
+
+            await saveEntity(data)
           }
         })
 
@@ -1735,7 +1734,25 @@
           if (hasFileUpload) {
             await saveEntity(formData)
           } else {
-            await saveEntity(formData)
+            const data = {}
+            const config = entityConfigs[currentEntity]
+
+            config.fields.forEach((field) => {
+              if (field.type === "checkbox") {
+                data[field.name] = formData.has(field.name)
+              } else if (field.type === "multi-select" || field.type === "multi-select-players" || field.type === "multi-select-teams" || field.type === "multi-select-events") {
+                data[field.name] = formData.getAll(field.name)
+              } else if (field.type === "ordered-select-players") {
+                data[field.name] = orderedParticipants || []
+              } else if (field.type === "number") {
+                const value = formData.get(field.name)
+                data[field.name] = value ? parseInt(value) : null
+              } else if (field.type !== "file") {
+                data[field.name] = formData.get(field.name) || null
+              }
+            })
+
+            await saveEntity(data)
           }
         })
 
